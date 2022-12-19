@@ -73,6 +73,8 @@ def SA(stdscr, maze, random_items_amt):
     i = 0
     total_visited_count = 0
     path = []
+    letters = ["}", *letters, "{"]
+
     while i != len(letters) - 1:
         inter_path, visited_count = astar.find_path(maze, stdscr, letters[i], letters[i + 1], path, print_path=True)
         path.extend(inter_path)
@@ -80,7 +82,7 @@ def SA(stdscr, maze, random_items_amt):
         i += 1
 
     print(
-            f"\n Ilosc krokow koniecznych do zebrania wszystkich zakupow to {len(path)} krokow,"
+            f"\nIlosc krokow koniecznych do zebrania wszystkich zakupow to {len(path)} krokow,"
             f" gdzie jeden znak w przedstawionej wczesniej symulacji to jeden krok."
         )
     print(f"Ilosc wszystkich sprawdzonych krokow to {total_visited_count}")
