@@ -104,7 +104,7 @@ def menu_sa():
             continue
 
     if sa_choice == 1:
-        algorithm_choice = 4
+        algorithm_choice = "4"
     else:
         while True:
             print(
