@@ -8,6 +8,12 @@ from menu import menu
 import maze_func
 
 
+chosen_maze, algorithm_choice, random_items_amt = menu()
+maze = maze_func.randomize_items_in_store(chosen_maze, how_many_items=random_items_amt)
+maze = maze_func.order_random_items_to_start(
+    chosen_maze, maze_func.get_checkpoint_coords(chosen_maze)
+)
+
 def main(stdscr):
     curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
@@ -21,10 +27,4 @@ def main(stdscr):
         if algo == "3":
             run(stdscr, maze, dfs, "DFS", random_items_amt)
 
-
-chosen_maze, algorithm_choice, random_items_amt = menu()
-maze = maze_func.randomize_items_in_store(chosen_maze, how_many_items=random_items_amt)
-maze = maze_func.order_random_items_to_start(
-    chosen_maze, maze_func.get_checkpoint_coords(chosen_maze)
-)
 curses.wrapper(main)

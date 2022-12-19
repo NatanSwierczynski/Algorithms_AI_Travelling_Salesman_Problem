@@ -47,3 +47,26 @@ def run(stdscr, chosen_maze, algorithm, algo_name, amt_random_items) -> None:
     # print(f"{coords}")
     if PRINT_PATH or SHOWCASE:
         stdscr.getch()
+
+def run_sa(stdscr, chosen_maze, algorithm, amt_random_items) -> None:
+    path = []
+    total_visited_count = 0
+    check = maze_func.check_if_checkpoints_in_maze(chosen_maze)
+    if check:
+        letters = [
+            letter for i, letter in enumerate(ascii_letters) if i < amt_random_items
+        ]
+        letters = ["}", *letters, "{"]
+        i = 0
+        while i != len(letters) - 1:
+            inter_path, visited_count = algorithm.find_path(chosen_maze, stdscr, letters[i], letters[i + 1], path, print_path=False)
+            path.extend(inter_path)
+            total_visited_count += visited_count
+            i += 1
+    else:
+        path, total_visited_count = algorithm.find_path(
+            chosen_maze, stdscr, "}", "{", path, print_path=False
+        )
+
+    temp_path = len(path)
+    return temp_path

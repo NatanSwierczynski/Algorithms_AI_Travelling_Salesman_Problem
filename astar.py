@@ -16,6 +16,10 @@ class PrioritizedItem:
 def distance(start: tuple[int, int], end: tuple[int, int], current: tuple[int, int]) -> float:
     distance_start = sqrt((current[0] - start[0]) ** 2 + (current[1] - start[1]) ** 2)
     distance_end = sqrt((current[0] - end[0]) ** 2 + (current[1] - end[1]) ** 2)
+
+    #distance_start = abs(current[0] - start[0]) + abs(current[1] - start[1])
+    #distance_end = abs(current[0] - end[0]) + abs(current[1] - end[1])
+
     return distance_start + distance_end
 
 
