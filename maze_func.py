@@ -75,7 +75,7 @@ def randomize_items_in_store(
             for y, character in enumerate(column):
                 if i >= how_many_items:
                     return maze
-                if character == "#" and random.randint(0, 10) > 8:  #(0,100) > 95:
+                if character == "#" and random.randint(0,100) > 95: #(0, 10) > 8:
                     maze[x][y] = ascii_letters[i]
                     i += 1
 
