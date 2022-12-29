@@ -1,4 +1,5 @@
 from SA import SA
+from SA_v2 import SA_v2
 import dfs
 import astar
 import dijkstra
@@ -8,11 +9,14 @@ from run import run
 from menu import menu_sa
 import maze_func
 import curses
+import random
 
 #stdscr = curses.initscr()
 
 chosen_maze, algorithm_choice, random_items_amt = menu_sa()
+random.seed(10)
 initial_maze = maze_func.randomize_items_in_store(chosen_maze, how_many_items=random_items_amt)
+random.seed()
 maze_0 = maze_func.order_random_items_to_start(initial_maze, maze_func.get_checkpoint_coords(chosen_maze))
 
 
@@ -35,7 +39,8 @@ def main_sa(stdscr):
         if algo == "4":
             # algo_name = "SA with A*"
             # best_path = run_sa(stdscr, maze, astar, random_items_amt)
-            SA(stdscr, initial_maze, random_items_amt)
+            # SA(stdscr, initial_maze, random_items_amt)
+            SA_v2(stdscr, initial_maze, random_items_amt)
 
 
 curses.wrapper(main_sa)
