@@ -7,13 +7,23 @@ import curses
 from string import ascii_letters
 from tqdm import tqdm
 
+import numpy as np
 
-def SA(stdscr, maze, random_items_amt):
+def letter_to_index(letter, random_items_amt):
+    if letter == '}':
+        return 0
+    elif letter == '{':
+        return random_items_amt + 1
+    else:
+        return ord(letter) - ord('a') + 1
+
+def SA_v2(stdscr, maze, random_items_amt):
 
     #inicjalizacja zmiennych wejsciowych
-    T = 100
+    T = 1000
     T_min = 0.1
     alpha = 0.99
+    iter = 10000
     #temp_maze = chosen_maze
 
     # check = maze_func.check_if_checkpoints_in_maze(maze)
@@ -22,76 +32,83 @@ def SA(stdscr, maze, random_items_amt):
     #     #letters = ["}", *letters, "{"]
 
     letters = [letter for i, letter in enumerate(ascii_letters) if i < random_items_amt]
+    letters = ["}", *letters, "{"]
+
+    print("ścieżka początkowa:\n", letters,'\n')
 
     #TODO - dodać macierz odległości pomiedzy punktami
-    #Tablica z dlugoscia sciezek pomiedzy wszytskimi punktami
-    Distances = []
-
     #Wyznaczanie dlugosci sciezek pomiedzy wszytskimi punktami i zapisywanie ich do tablicy
+    # Distances = []
+    # path = []
+    # for i in range(0, random_items_amt):
+    #     for j in range(0, random_items_amt):
+    #         if i == j:
+    #             Distances.append(0)
+    #         else:
+    #             path_temp, visited_nodes_count_temp = astar.find_path(maze, stdscr, letters[i], letters[j], path, print_path=False)
+    #             #Distances += len(path_temp)
+    #             Distances.append(len(path_temp))
+
+    #Wersja z macierzą
+    Path_Distance = np.zeros(shape=(len(letters), len(letters)))
     path = []
-    for i in random_items_amt:
-        for j in random_items_amt:
+    for i in range(0, len(letters)):
+        for j in range(0, len(letters)):
             if i == j:
-                Distances.append(0)
+                Path_Distance[i][j] = 0
             else:
                 path_temp, visited_nodes_count_temp = astar.find_path(maze, stdscr, letters[i], letters[j], path, print_path=False)
-                #Distances += len(path_temp)
-                Distances.append(len(path_temp))
+                Path_Distance[i][j] = (len(path_temp))
 
+    print('\n'"Macierz odleglosci miedzy punktami:"'\n', Path_Distance, '\n')
 
-
-    # progress = tqdm()
-
-    # stdscr.clear()
-    # iter_count = 0
+    #TODO - dodanie pętli z ilością iteracji bez zmiany temp oraz nadpisywanie na ekranie poprawy wyników
     while T > T_min:
-        # iter_count += 1
-        # stdscr.addstr(0, 0, f'{iter_count} iterations')
-        # stdscr.refresh()
-        # progress.update()
-        #a, b = random.sample(letters, 2)
-        a = random.randint(0, len(letters)-1)
-        b = random.randint(0, len(letters)-1)
-        while a == b:
-            b = random.randint(0, len(letters)-1)
-        a, b = (a, b) if a < b else (b,a)
+        for i in range(0, iter-1):
+            a = random.randint(1, len(letters)-2)
+            b = random.randint(1, len(letters)-2)
+            while a == b:
+                b = random.randint(1, len(letters)-2)
+            a, b = (a, b) if a < b else (b,a)
 
-        path = []
-        path_1, visited_nodes_count_1 = astar.find_path(maze, stdscr, letters[a], letters[b], path, print_path=False)
-        #path = []
-        if b == len(letters)-1:
-            path_2 = []
-        else:
-            path_2, visited_nodes_count_2 = astar.find_path(maze, stdscr, letters[a+1], letters[b+1], path, print_path=False)
-        #path = []
-        path_3, visited_nodes_count_3 = astar.find_path(maze, stdscr, letters[a], letters[a+1], path, print_path=False)
-        #path = []
-        if b == len(letters)-1:
-            path_4 = []
-        else:
-            path_4, visited_nodes_count_4 = astar.find_path(maze, stdscr, letters[b], letters[b+1], path, print_path=False)
 
-        delta = len(path_1) + len(path_2) - len(path_3) - len(path_4)
+            #path_1 -> sciezka z letters[a] do letters[b]
+            path_1 = Path_Distance[letter_to_index(letters[a], random_items_amt)][letter_to_index(letters[b], random_items_amt)]
+            # if b == len(letters)-2:
+            #     path_2 = 0
+            # else:
+                #path_2 -> letters[a+1], letters[b+1]
+            path_2 = Path_Distance[letter_to_index(letters[a+1], random_items_amt)][letter_to_index(letters[b+1], random_items_amt)]
+            #path_3 -> letters[a], letters[a+1]
+            path_3 = Path_Distance[letter_to_index(letters[a], random_items_amt)][letter_to_index(letters[a+1], random_items_amt)]
+            # if b == len(letters)-2:
+            #     path_4 = 0
+            # else:
+                #path_4 -> letters[b], letters[b+1]
+            path_4 = Path_Distance[letter_to_index(letters[b], random_items_amt)][letter_to_index(letters[b+1], random_items_amt)]
 
-        x = random.random()
-        threshold = math.exp(-delta / T)
+            delta = path_1 + path_2 - path_3 - path_4
 
-        if delta < 0 or threshold > x:
-            #zamiana kolejności produktów w trasie
-            letters[min(a, b):max(a, b)] = letters[min(a, b):max(a, b)][::-1]
-        else:
-            letters = letters
+            x = random.random()
+            threshold = math.exp(-delta / T)
 
-        #TODO - nadpisywanie maze - poprzez zapisywanie letters do temp_maze
+            if delta < 0 or threshold > x:
+                #zamiana kolejności produktów w trasie
+                letters[a:b+1] = letters[a:b+1][::-1]
+            else:
+                letters = letters
 
         T = alpha * T
 
-    # progress.close()
+    # for i in letters:
+    #     final_path += Path_Distance[][]
+    #     enumerate(ascii_letters)
 
     i = 0
     total_visited_count = 0
     path = []
-    letters = ["}", *letters, "{"]
+    #letters = ["}", *letters, "{"]
+    print("ścieżka koncowa:\n", letters,'\n')
 
     while i != len(letters) - 1:
         inter_path, visited_count = astar.find_path(maze, stdscr, letters[i], letters[i + 1], path, print_path=True)
