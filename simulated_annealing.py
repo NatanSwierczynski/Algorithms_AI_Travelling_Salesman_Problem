@@ -42,5 +42,4 @@ def main_sa(stdscr):
             # SA(stdscr, initial_maze, random_items_amt)
             SA_v2(stdscr, initial_maze, random_items_amt)
 
-
 curses.wrapper(main_sa)

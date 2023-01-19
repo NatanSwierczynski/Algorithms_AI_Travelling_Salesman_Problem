@@ -6,9 +6,12 @@ import curses
 # stdscr = curses.initscr()
 from string import ascii_letters
 from tqdm import tqdm
+import time
 
 
 def SA(stdscr, maze, random_items_amt):
+
+    start_time = time.time()
     #inicjalizacja zmiennych wejsciowych
     T = 100
     T_min = 0.1
@@ -60,7 +63,7 @@ def SA(stdscr, maze, random_items_amt):
 
         if delta < 0 or threshold > x:
             #zamiana kolejności produktów w trasie
-            letters[min(a, b):max(a, b)] = letters[min(a, b):max(a, b)][::-1]
+            letters[min(a+1, b+1):max(a+1, b+1)] = letters[min(a+1, b+1):max(a+1, b+1)][::-1]
         else:
             letters = letters
 
@@ -81,8 +84,13 @@ def SA(stdscr, maze, random_items_amt):
         total_visited_count += visited_count
         i += 1
 
+    end_time = time.time()
+
     print(
             f"\nIlosc krokow koniecznych do zebrania wszystkich zakupow to {len(path)} krokow,"
             f" gdzie jeden znak w przedstawionej wczesniej symulacji to jeden krok."
         )
     print(f"Ilosc wszystkich sprawdzonych krokow to {total_visited_count}")
+
+    elapsed_time = end_time - start_time
+    print('Execution time:', elapsed_time, 'seconds')

@@ -6,6 +6,7 @@ import curses
 # stdscr = curses.initscr()
 from string import ascii_letters
 from tqdm import tqdm
+import time
 
 import numpy as np
 
@@ -19,11 +20,13 @@ def letter_to_index(letter, random_items_amt):
 
 def SA_v2(stdscr, maze, random_items_amt):
 
+    start_time = time.time()
+
     #inicjalizacja zmiennych wejsciowych
     T = 1000
     T_min = 0.1
     alpha = 0.99
-    iter = 10000
+    iter = 100
     #temp_maze = chosen_maze
 
     # check = maze_func.check_if_checkpoints_in_maze(maze)
@@ -36,20 +39,6 @@ def SA_v2(stdscr, maze, random_items_amt):
 
     print("ścieżka początkowa:\n", letters,'\n')
 
-    #TODO - dodać macierz odległości pomiedzy punktami
-    #Wyznaczanie dlugosci sciezek pomiedzy wszytskimi punktami i zapisywanie ich do tablicy
-    # Distances = []
-    # path = []
-    # for i in range(0, random_items_amt):
-    #     for j in range(0, random_items_amt):
-    #         if i == j:
-    #             Distances.append(0)
-    #         else:
-    #             path_temp, visited_nodes_count_temp = astar.find_path(maze, stdscr, letters[i], letters[j], path, print_path=False)
-    #             #Distances += len(path_temp)
-    #             Distances.append(len(path_temp))
-
-    #Wersja z macierzą
     Path_Distance = np.zeros(shape=(len(letters), len(letters)))
     path = []
     for i in range(0, len(letters)):
@@ -62,7 +51,7 @@ def SA_v2(stdscr, maze, random_items_amt):
 
     print('\n'"Macierz odleglosci miedzy punktami:"'\n', Path_Distance, '\n')
 
-    #TODO - dodanie pętli z ilością iteracji bez zmiany temp oraz nadpisywanie na ekranie poprawy wyników
+    #TODO - dodać nadpisywanie na ekranie poprawy wyników i czas działania programu
     while T > T_min:
         for i in range(0, iter-1):
             a = random.randint(1, len(letters)-2)
@@ -94,7 +83,7 @@ def SA_v2(stdscr, maze, random_items_amt):
 
             if delta < 0 or threshold > x:
                 #zamiana kolejności produktów w trasie
-                letters[a:b+1] = letters[a:b+1][::-1]
+                letters[a+1:b+1] = letters[a+1:b+1][::-1]
             else:
                 letters = letters
 
@@ -116,8 +105,13 @@ def SA_v2(stdscr, maze, random_items_amt):
         total_visited_count += visited_count
         i += 1
 
+    end_time = time.time()
+
     print(
             f"\nIlosc krokow koniecznych do zebrania wszystkich zakupow to {len(path)} krokow,"
             f" gdzie jeden znak w przedstawionej wczesniej symulacji to jeden krok."
         )
     print(f"Ilosc wszystkich sprawdzonych krokow to {total_visited_count}")
+
+    elapsed_time = end_time - start_time
+    print('Execution time:', elapsed_time, 'seconds')

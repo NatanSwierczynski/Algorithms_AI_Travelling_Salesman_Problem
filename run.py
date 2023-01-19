@@ -2,6 +2,7 @@ from string import ascii_letters
 from mazes import base_maze, base_maze1, base_maze2
 import curses
 import maze_func
+import time
 
 # Poniższa zmienna decyduje czy należy wykreślić śnieżkę końcową w terminalu
 PRINT_PATH = False
@@ -10,6 +11,7 @@ SHOWCASE = True
 
 
 def run(stdscr, chosen_maze, algorithm, algo_name, amt_random_items) -> None:
+    start_time = time.time()
     path = []
     total_visited_count = 0
     check = maze_func.check_if_checkpoints_in_maze(chosen_maze)
@@ -40,10 +42,15 @@ def run(stdscr, chosen_maze, algorithm, algo_name, amt_random_items) -> None:
     if PRINT_PATH:
         maze_func.print_maze(chosen_maze, stdscr, path, path)
 
+    end_time = time.time()
     print(
         f"\n{algo_name}: Ilosc krokow koniecznych do zebrania wszystkich zakupow to {len(path)} krokow, gdzie jeden znak w przedstawionej wczesniej symulacji to jeden krok."
     )
     print(f"Ilosc wszystkich sprawdzonych krokow to {total_visited_count}")
+
+    elapsed_time = end_time - start_time
+    print('Execution time:', elapsed_time, 'seconds')
+
     # print(f"{coords}")
     if PRINT_PATH or SHOWCASE:
         stdscr.getch()
