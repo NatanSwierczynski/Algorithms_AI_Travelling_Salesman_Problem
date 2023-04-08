@@ -1,4 +1,4 @@
-# Algorytmy_AI
+# Algorithms_AI
 
 Optymalizacja trasy podczas zakupów w hipermarkecie
 
