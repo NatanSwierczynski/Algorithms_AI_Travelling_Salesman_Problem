@@ -18,11 +18,14 @@ Wykorzystane algorytmy:
 - Symulowane wyżarzanie – wykorzystany do wyznaczenia kolejności przechodzenia przez punkty kontrolne.
 
 Interfejs użytkownika został zrobiony w konsoli.
-Przykladowe dzialanie aplikacji
+
+Przykladowe dzialanie aplikacji:
 Labirynt poczatkowy z wylosowanymi produktami oznaczonymi kolejnymi literami alfabetu:
+
 ![image](https://github.com/NatanSwierczynski/Algorytmy_AI/assets/106707211/2a3883c4-49bd-4225-9fe9-a3f4fe9ba7db)
 
 Wyznaczona trasa:
+
 ![image](https://github.com/NatanSwierczynski/Algorytmy_AI/assets/106707211/45465956-1a63-49dd-be19-d29f0461a765)
 
 
