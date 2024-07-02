@@ -18,6 +18,7 @@ Wykorzystane algorytmy:
 Interfejs użytkownika został zrobiony w konsoli.
 
 Przykladowe dzialanie aplikacji:
+
 Labirynt poczatkowy z wylosowanymi produktami oznaczonymi kolejnymi literami alfabetu:
 
 ![image](https://github.com/NatanSwierczynski/Algorytmy_AI/assets/106707211/2a3883c4-49bd-4225-9fe9-a3f4fe9ba7db)
