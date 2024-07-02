@@ -1,6 +1,4 @@
-# Algorytmy_AI
-
-Optymalizacja trasy podczas zakupów w hipermarkecie
+# Optymalizacja trasy podczas zakupów w hipermarkecie
 
 Jest to wariancja problemu komiwojażera, gdzie:
 - Na płaszczyźnie umieszczone są „przeszkody” (półki sklepowe), przez które przejście jest niemożliwe,
